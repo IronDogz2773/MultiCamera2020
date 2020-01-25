@@ -28,6 +28,7 @@ import edu.wpi.first.vision.VisionPipeline;
 import edu.wpi.first.vision.VisionThread;
 
 import org.opencv.core.Mat;
+import lines1.*;
 
 /*
    JSON format:
@@ -282,14 +283,6 @@ public final class Main {
   /**
    * Example pipeline.
    */
-  public static class MyPipeline implements VisionPipeline {
-    public int val;
-
-    @Override
-    public void process(Mat mat) {
-      val += 1;
-    }
-  }
 
   /**
    * Main.
@@ -327,7 +320,7 @@ public final class Main {
     // start image processing on camera 0 if present
     if (cameras.size() >= 1) {
       VisionThread visionThread = new VisionThread(cameras.get(0),
-              new MyPipeline(), pipeline -> {
+              new FindShapesPipeline(), pipeline -> {
         // do something with pipeline results
       });
       /* something like this for GRIP:
