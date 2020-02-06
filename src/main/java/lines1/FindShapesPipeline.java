@@ -16,7 +16,7 @@ public class FindShapesPipeline implements VisionPipeline {
         FindShapes.Result result = FindShapes.processImage(image, false);
         //System.out.println(result.contours.length);
         if (result.target != null) {
-            double x = result.target[0];
+            double x = result.target.center.x;
             double alpha = 30 * (x - xc) / xc;
             //System.out.println("t=" + result.target[0] + "," + result.target[1]);
             System.out.println(alpha + " Degrees");

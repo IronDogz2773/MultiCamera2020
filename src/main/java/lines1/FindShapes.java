@@ -9,18 +9,51 @@ import org.opencv.core.Scalar;
 
 public class FindShapes
 {
+    static class Target{
+        public Point center;
+    }
+
+    //package of variables used to return final product
     static class Result {
         public Mat display;
         public Point[][] contours;
-        public double[] target;
+        public Target target;
     }
     private static final Size BLUR_SIZE = new Size(5,5);
 
-    static boolean isGoodContour(Point[] c) {
-        if (c.length < 4) return false;
-        return true;
-     }
+    //calculates area of the contour
+    static double contourArea(Point[] c){
+        double sum = (c[0].y + c[c.length - 1].y) * (c[0].x - c[c.length - 1].x);
+        for(int i = 1; i < c.length; i++){
+            sum += (c[i].y + c[i - 1].y) * (c[i].x - c[i - 1].x);
+        }
+        return sum * .5;
+    }
 
+
+    static double contourHeight(Point[] c){
+        double min = c[0].y;
+        double max = c[0].y;
+        for (int i = 1; i < c.length; i++)
+        {
+            if (c[i].y < min){
+                min = c[i].y;
+            }
+            if (c[i].y > max){
+                max = c[i].y;
+            }
+        }
+        return max - min;
+    }
+
+    //determines if the contour is large enough
+    static boolean isGoodContour(Point[] c) {
+        if (c.length < 4 || c.length > 12) return false;
+        if (Math.abs(contourArea(c)) < 300) return false;
+        return true;
+    }
+
+    //modifies image and returns Result
     public static Result processImage(Mat original, boolean enableDisplay)
     {   
         Result result = new Result();
@@ -42,13 +75,14 @@ public class FindShapes
         List<MatOfPoint> contours = new ArrayList<>();
         Imgproc.findContours(filtered, contours, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_NONE);
 
-        //System.out.println("contours count = " + contours.size());
         List<Point[]> found_contours = new ArrayList<>();
         for (int i = 0; i < contours.size(); i++) {
             //approximate contours
             Point[] c = contours.get(i).toArray();
+            double h = contourHeight(c);
             MatOfPoint2f approx = new MatOfPoint2f();
-            Imgproc.approxPolyDP(new MatOfPoint2f(c),approx,3,true);
+            double approxEpsilon = h * .1;
+            Imgproc.approxPolyDP(new MatOfPoint2f(c),approx,approxEpsilon,true);
             c = approx.toArray();
             if (!isGoodContour(c)) {
                 continue;
@@ -91,10 +125,11 @@ public class FindShapes
                 if (c[i].x < c[min_i].x) min_i = i;
                 if (c[i].x > c[max_i].x) max_i = i;
             }
-            result.target = new double[2];
+            result.target = new Target();
             //finds average of x's and y's
-            result.target[0] = (c[min_i].x + c[max_i].x) / 2;                
-            result.target[1] = (c[min_i].y + c[max_i].y) / 2;
+            double cx = (c[min_i].x + c[max_i].x) / 2;
+            double cy = (c[min_i].y + c[max_i].y) / 2;
+            result.target.center = new Point(cx, cy);
         }
 
         return result;
