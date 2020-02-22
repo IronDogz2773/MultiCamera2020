@@ -8,6 +8,10 @@ import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 
 public class FindShapes {
+    /**
+     *
+     */
+    private static final int MAX_CONTOURS_LENGTH = 10;
     private static final int MAX_POINTS_CONTOUR = 12;
     private static final int MIN_POINTS_CONTOUR = 4;
     private static final int MIN_CONTOUR_AREA = 300;
@@ -132,8 +136,8 @@ public class FindShapes {
             return false;
         if (Math.abs(contourArea(c)) < MIN_CONTOUR_AREA)
             return false;
-       if (!isKmeansFit(c))
-           return false;
+        if (!isKmeansFit(c))
+            return false;
         return true;
     }
 
@@ -159,7 +163,11 @@ public class FindShapes {
         Imgproc.findContours(filtered, contours, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_NONE);
 
         List<Point[]> found_contours = new ArrayList<>();
-        for (int i = 0; i < contours.size(); i++) {
+        int contours_length = contours.size();
+        if (contours_length > MAX_CONTOURS_LENGTH) {
+            contours_length = MAX_CONTOURS_LENGTH;
+        }
+        for (int i = 0; i < contours_length; i++) {
             // approximate contours
             Point[] c = contours.get(i).toArray();
             double h = contourHeight(c);
@@ -168,7 +176,7 @@ public class FindShapes {
             Imgproc.approxPolyDP(new MatOfPoint2f(c), approx, approxEpsilon, true);
             c = approx.toArray();
             if (!isGoodContour(c, original.cols(), original.rows())) {
-               continue;
+                continue;
             }
 
             /*

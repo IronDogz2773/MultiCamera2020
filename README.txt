@@ -35,3 +35,14 @@ Building locally on rPi
 2) Run "./install.sh" (replaces /home/pi/runCamera)
 3) Run "./runInteractive" in /home/pi or "sudo svc -t /service/camera" to
    restart service.
+
+
+
+===================
+IronDogz Procedures
+===================
+
+To update algorithm from [FindTarget2020](https://github.com/IronDogz2773/FindTarget2020)
+
+1) Copy "FindShapes.java" file from FindTargets' folder "src\main\java\lines1"
+2) Paste it in "src\main\java\lines1" and it replaces the current file 
