@@ -44,5 +44,5 @@ IronDogz Procedures
 
 To update algorithm from [FindTarget2020](https://github.com/IronDogz2773/FindTarget2020)
 
-1) Copy "FindShapes.java" file from FindTargets' folder "src\main\java\lines1"
-2) Paste it in "src\main\java\lines1" and it replaces the current file 
+1) Copy "FindShapes.java" file from FindTargets' folder "src\main\java\team2773\find_targets"
+2) Paste it in "src\main\java\team2773\find_targets" and it replaces the current file 

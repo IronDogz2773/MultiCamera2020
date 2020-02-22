@@ -1,4 +1,4 @@
-package lines1;
+package team2773.find_targets;
 
 import org.opencv.core.Mat;
 

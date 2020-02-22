@@ -26,7 +26,7 @@ import edu.wpi.first.networktables.EntryListenerFlags;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.vision.VisionThread;
 
-import lines1.*;
+import team2773.find_targets.*;
 
 /*
    JSON format:
