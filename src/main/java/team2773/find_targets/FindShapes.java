@@ -136,8 +136,6 @@ public class FindShapes {
             return false;
         if (Math.abs(contourArea(c)) < MIN_CONTOUR_AREA)
             return false;
-        if (!isKmeansFit(c))
-            return false;
         return true;
     }
 
